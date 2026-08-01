@@ -66,12 +66,18 @@ export default function CurrencyConversionForm() {
     }
   }
 
+  function handleSwap() {
+    setSourceCurrency(targetCurrency);
+    setTargetCurrency(sourceCurrency);
+  }
+
   return (
     <section className="card" aria-labelledby="convert-heading">
       <h2 id="convert-heading">Convert currency</h2>
+      <p className="card-subtitle">Enter an amount, pick the currencies, and submit for an audit-logged conversion.</p>
 
       <form onSubmit={handleSubmit}>
-        <div className="form-grid">
+        <div className="convert-grid">
           <div>
             <label htmlFor="amount">Amount</label>
             <input
@@ -85,7 +91,7 @@ export default function CurrencyConversionForm() {
             />
           </div>
           <div>
-            <label htmlFor="source">Source currency</label>
+            <label htmlFor="source">From</label>
             <select
               id="source"
               value={sourceCurrency}
@@ -99,8 +105,23 @@ export default function CurrencyConversionForm() {
               ))}
             </select>
           </div>
+          <button
+            type="button"
+            className="swap-button"
+            onClick={handleSwap}
+            aria-label="Swap source and target currencies"
+            title="Swap currencies"
+            disabled={submitting}
+          >
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M7 4L3 8L7 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M3 8H17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M17 20L21 16L17 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M21 16H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
           <div>
-            <label htmlFor="target">Target currency</label>
+            <label htmlFor="target">To</label>
             <select
               id="target"
               value={targetCurrency}
@@ -116,7 +137,7 @@ export default function CurrencyConversionForm() {
           </div>
         </div>
 
-        <div style={{ marginTop: '1rem' }}>
+        <div className="actions">
           <button type="submit" disabled={submitting}>
             {submitting ? 'Converting…' : 'Convert'}
           </button>
@@ -127,18 +148,18 @@ export default function CurrencyConversionForm() {
 
       {result && (
         <div className="result" aria-live="polite">
+          <div className="result-hero">
+            <span className="hero-label">Converted amount</span>
+            <span className="hero-amount">
+              {result.convertedAmount} {result.targetCurrency}
+            </span>
+            <span className="hero-sub">
+              {result.originalAmount} {result.sourceCurrency} @ {result.appliedRate}
+            </span>
+          </div>
           <dl>
             <dt>Conversion ID</dt>
             <dd className="mono">{result.conversionId}</dd>
-
-            <dt>Original amount</dt>
-            <dd>{result.originalAmount} {result.sourceCurrency}</dd>
-
-            <dt>Applied rate</dt>
-            <dd>{result.appliedRate}</dd>
-
-            <dt>Converted amount</dt>
-            <dd>{result.convertedAmount} {result.targetCurrency}</dd>
 
             <dt>Provider date marker</dt>
             <dd>{result.providerDateMarker}</dd>

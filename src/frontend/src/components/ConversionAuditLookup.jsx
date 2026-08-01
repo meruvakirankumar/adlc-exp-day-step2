@@ -29,19 +29,21 @@ export default function ConversionAuditLookup() {
   return (
     <section className="card" aria-labelledby="lookup-heading">
       <h2 id="lookup-heading">Look up a past conversion</h2>
+      <p className="card-subtitle">Paste a conversion ID to retrieve the persisted audit record — no recalculation.</p>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="lookup-id">Conversion ID</label>
-        <input
-          id="lookup-id"
-          type="text"
-          value={conversionId}
-          onChange={(e) => setConversionId(e.target.value)}
-          placeholder="Paste a conversionId returned from a previous conversion"
-          required
-        />
-
-        <div style={{ marginTop: '1rem' }}>
+        <div className="lookup-row">
+          <div>
+            <label htmlFor="lookup-id">Conversion ID</label>
+            <input
+              id="lookup-id"
+              type="text"
+              value={conversionId}
+              onChange={(e) => setConversionId(e.target.value)}
+              placeholder="e.g. 39ebe205cd5840c8b89ca9d83b33935c"
+              required
+            />
+          </div>
           <button type="submit" disabled={loading}>
             {loading ? 'Loading…' : 'Look up'}
           </button>
@@ -52,18 +54,18 @@ export default function ConversionAuditLookup() {
 
       {record && (
         <div className="result" aria-live="polite">
+          <div className="result-hero">
+            <span className="hero-label">Audit record</span>
+            <span className="hero-amount">
+              {record.convertedAmount} {record.targetCurrency}
+            </span>
+            <span className="hero-sub">
+              {record.originalAmount} {record.sourceCurrency} @ {record.appliedRate}
+            </span>
+          </div>
           <dl>
             <dt>Conversion ID</dt>
             <dd className="mono">{record.conversionId}</dd>
-
-            <dt>Original amount</dt>
-            <dd>{record.originalAmount} {record.sourceCurrency}</dd>
-
-            <dt>Applied rate</dt>
-            <dd>{record.appliedRate}</dd>
-
-            <dt>Converted amount</dt>
-            <dd>{record.convertedAmount} {record.targetCurrency}</dd>
 
             <dt>Provider date marker</dt>
             <dd>{record.providerDateMarker}</dd>
