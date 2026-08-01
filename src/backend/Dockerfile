@@ -5,6 +5,7 @@ COPY OuterloopLabApi/OuterloopLabApi.csproj OuterloopLabApi/
 RUN dotnet restore OuterloopLabApi/OuterloopLabApi.csproj
 
 COPY OuterloopLabApi/ OuterloopLabApi/
+COPY Features/ Features/
 RUN dotnet publish OuterloopLabApi/OuterloopLabApi.csproj -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
